@@ -8,7 +8,7 @@ type ProductsProps = {
   stock:number;
   handler: () => void;
 }
-const server = "asbjcndkjckdknnc"
+// const server = "asbjcndkjckdknnc"
 
 const ProductCard = ({
 productId,price, name, photo,stock,handler

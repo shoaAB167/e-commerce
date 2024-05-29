@@ -34,7 +34,8 @@ $color3: rgb(0, 104, 136);
 }
 
 @import "admin-styles/mixin";
-@import "home.scss";
+@import "home";
+@import "cart";
 @import "admin-styles/dashboard";
 @import "admin-styles/products";
 @import "admin-styles/chart";
@@ -43,7 +44,7 @@ $color3: rgb(0, 104, 136);
 
 .header {
   @include flex(row, flex-end, stretch, 1.2rem);
-  padding: 1 rem;
+  padding: 1rem;
   a {
     color: $color2;
     letter-spacing: 2px;
@@ -52,7 +53,6 @@ $color3: rgb(0, 104, 136);
   &:hover {
     color: $color3;
   }
-
   button {
     border: none;
     font-size: 1.2rem;
@@ -70,7 +70,7 @@ $color3: rgb(0, 104, 136);
     width: 100px;
     position: absolute;
     left: calc(100% - 100px);
-    top: 8%;
+    top: 6%;
     > div {
       @include flex(column, flex-start, center, 0.25 rem);
     }
