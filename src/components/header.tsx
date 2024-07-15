@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const user = { _id: "asc", role: "admin" };
+const user = { _id: "", role: "" };
 
 //Reusable header component
 const Header = () => {
