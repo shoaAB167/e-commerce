@@ -1,4 +1,6 @@
 import { useState } from "react";
+import React from "react";
+import {User} from '../types/types'
 import {
   FaSearch,
   FaShoppingBag,
@@ -9,9 +11,12 @@ import {
 import { Link } from "react-router-dom";
 
 const user = { _id: "", role: "" };
+interface PropsType {
+  user : User | null
+}
 
 //Reusable header component
-const Header = () => {
+const Header = ({user} : PropsType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const logoutHandler = () => {
@@ -27,7 +32,6 @@ const Header = () => {
       <Link onClick={() => setIsOpen(false)} to={"/cart"}>
         <FaShoppingBag />
       </Link>
-
       {user?._id ? (
         <>
           <button onClick={() => setIsOpen((prev) => !prev)}>

@@ -1,9 +1,16 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { lazy } from "react";
+import { lazy, useEffect } from "react";
 import { Suspense } from "react";
 import Loader from "./components/loader";
 import Header from "./components/header";
-import { Toaster} from "react-hot-toast"
+import { Toaster } from "react-hot-toast";
+import React from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { userExist, userNotExist } from "./redux/reducer/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "./redux/api/userAPI";
+import { UserReducerInitialState } from "./types/reducer-types";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
@@ -33,9 +40,25 @@ const TransactionManagement = lazy(
 );
 
 const App = () => {
-  return (
+  const dispatch = useDispatch();
+  const { user, loading } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const data = await getUser(user.uid);
+        dispatch(userExist(data.user));
+      } else {
+        dispatch(userNotExist());
+      }
+    });
+  }, []);
+  return loading ? (
+    <Loader />
+  ) : (
     <Router>
-      <Header />
+      <Header user={user} />
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -43,7 +66,7 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
 
           {/* Not Logged In Route */}
-          <Route path="/login" element={<Login/>}/>
+          <Route path="/login" element={<Login />} />
           {/* Logged in users routes */}
           <Route>
             <Route path="/shipping" element={<Shipping />} />
@@ -82,7 +105,7 @@ const App = () => {
           </Route>
         </Routes>
       </Suspense>
-      <Toaster position="bottom-center"/>
+      <Toaster position="bottom-center" />
     </Router>
   );
 };
