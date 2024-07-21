@@ -9,8 +9,9 @@ import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "./redux/api/userAPI";
 import { UserReducerInitialState } from "./types/reducer-types";
-import {auth} from './firebase.ts'
+import { auth } from "./firebase.ts";
 import React from "react";
+import ProtectedRoute from "./components/protected-route.tsx";
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
 const Cart = lazy(() => import("./pages/cart"));
@@ -65,9 +66,17 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
 
           {/* Not Logged In Route */}
-          <Route path="/login" element={<Login />} />
+          {/* If user login page is not accessible */}
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute isAuthenticated={user ? false : true}>
+                <Login />
+              </ProtectedRoute>
+            }
+          />
           {/* Logged in users routes */}
-          <Route>
+          <Route element={<ProtectedRoute isAuthenticated={user ? true : false}/>}>
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
@@ -75,9 +84,9 @@ const App = () => {
 
           {/* Admin user routes */}
           <Route
-          // element={
-          //   <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} />
-          // }
+          element={
+            <ProtectedRoute isAuthenticated={true} adminOnly={true} admin={user?.role ==="admin" ? true : false} />
+          }
           >
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/product" element={<Products />} />
