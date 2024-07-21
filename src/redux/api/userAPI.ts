@@ -3,7 +3,7 @@ import { MessageResponse, UserResponse } from "../../types/api-types"
 import { User } from "../../types/types"
 import axios from "axios"
 
-const server = import.meta.env.VITE_SERVER
+export const server = import.meta.env.VITE_SERVER
 
 export const userAPI = createApi({
     reducerPath: "userApi",
