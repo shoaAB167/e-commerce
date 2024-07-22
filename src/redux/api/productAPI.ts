@@ -1,15 +1,42 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { server } from './userAPI'
-import { AllProductsResponse } from "../../types/api-types"
+import { AllProductsResponse, CategoriesResponse, MessageResponse, NewProductRequest, SearchProductsRequest, SearchProductsResponse } from "../../types/api-types"
 
 export const productAPI = createApi({
     reducerPath: "productApi",
     baseQuery: fetchBaseQuery({ baseUrl: `${server}/api/v1/product/` }),
+    tagTypes :["product"],//invalidate cache of RTK query
     endpoints: (builder) => ({
-        latestProducts : builder.query<AllProductsResponse,string>({query : ()=>"latest"}),
-        allProducts : builder.query<AllProductsResponse,string>({query : (id)=>`admin-products?id=${id}`})
+        latestProducts: builder.query<AllProductsResponse, string>({ query: () => "latest", providesTags:["product"] }),
+        allProducts: builder.query<AllProductsResponse, string>({ query: (id) => `admin-products?id=${id}`,providesTags:["product"] }),
+        categories: builder.query<CategoriesResponse, string>({ query: () => `categories`,providesTags:["product"] }),
+        searchProducts: builder.query<SearchProductsResponse, SearchProductsRequest>({
+            query: ({ price, search, sort, category, page }) => {
+                let base = `all?search=${search}&page=${page}`;
+                if (price) base += `&price=${price}`;
+                if (sort) base += `&sort=${sort}`;
+                if (category) category += `&category=${category}`
+
+                return base
+            },
+            providesTags:["product"]
+        }),
+        newProducts: builder.mutation<MessageResponse, NewProductRequest>({
+            query: ({ formData, id }) => ({
+                url: `new?id=${id}`,
+                method: 'POST',
+                body: formData
+            }),
+            invalidatesTags:["product"]
+        }),
     })
-    
+
 })
 
-export const {useLatestProductsQuery, useAllProductsQuery} = productAPI
+export const { 
+    useLatestProductsQuery, 
+    useAllProductsQuery, 
+    useCategoriesQuery, 
+    useSearchProductsQuery, 
+    useNewProductsMutation 
+} = productAPI
