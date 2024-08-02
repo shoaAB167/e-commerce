@@ -1,7 +1,14 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useState, useEffect } from "react";
 import TableHOC from "../components/admin/TableHOC";
 import { Column } from "react-table";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../types/reducer-types";
+import { useAllOrdersQuery, useMyOrdersQuery } from "../redux/api/orderAPI";
+import { CustomError } from "../types/api-types";
+import toast from "react-hot-toast";
+import { Skeleton } from "../components/loader";
+
 type DataType = {
   _id: string;
   amount: number;
@@ -21,17 +28,41 @@ const column: Column<DataType>[] = [
 ];
 
 const Orders = () => {
-  const [rows, setRows] = useState<DataType[]>([
-    {
-      _id: "abc",
-      amount: 123,
-      quantity: 12,
-      discount: 5666,
-      status: <span className="red">Processing</span>, //ReactElement = any html tag
-      action: <Link to={`/order/abc`}>view</Link>,
-    },
-  ]);
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+  const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
+  const [rows, setRows] = useState<DataType[]>([]);
+  if (isError) {
+    const err = error as CustomError;
+    toast.error(err.data.messsage);
+  }
 
+  useEffect(() => {
+    if (data)
+      setRows(
+        data.orders.map((i) => ({
+          _id: i._id,
+          amount: i.total,
+          discount: i.discount,
+          quantity: i.orderItems.length,
+          status: (
+            <span
+              className={
+                i.status === "Processing"
+                  ? "red"
+                  : i.status === "Shpped"
+                  ? "green"
+                  : "purple"
+              }
+            >
+              {i.status}
+            </span>
+          ),
+          action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>,
+        }))
+      );
+  }, [data]);
   const Table = TableHOC<DataType>(
     column,
     rows,
@@ -42,7 +73,7 @@ const Orders = () => {
   return (
     <div className="container">
       <h1>My orders</h1>
-      {Table}
+      {isLoading ? <Skeleton length={20} /> : Table}
     </div>
   );
 };
