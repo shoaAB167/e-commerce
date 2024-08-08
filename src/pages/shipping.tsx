@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CartReducerInitialState } from "../types/reducer-types";
 
-const Shipping = () => {
+const Shipping  = () => {
   const { cartItems } = useSelector(
     (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
   );
@@ -31,7 +31,6 @@ const Shipping = () => {
   return (
     <div className="shipping">
       <button className="back-btn" onClick={() => navigate("/cart")}>
-        {/* This is svg */}
         <BiArrowBack />
       </button>
       <form>
@@ -72,7 +71,7 @@ const Shipping = () => {
         </select>
         <input
           required
-          type="text"
+          type="number"
           placeholder="Pin Code"
           name="pinCode"
           value={shippingInfo.pinCode}

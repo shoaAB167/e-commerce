@@ -78,6 +78,7 @@ const Transaction = () => {
     (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
   const { isLoading, data, isError, error } = useAllOrdersQuery(user?._id!);
+  
   const [rows, setRows] = useState<DataType[]>([]);
   if (isError) {
     const err = error as CustomError;
