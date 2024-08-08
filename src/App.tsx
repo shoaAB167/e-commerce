@@ -13,11 +13,13 @@ import { auth } from "./firebase.ts";
 import React from "react";
 import ProtectedRoute from "./components/protected-route.tsx";
 import NotFound from './pages/not-found.tsx'
+import Checkout from "./pages/checkout.tsx"
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
 const Cart = lazy(() => import("./pages/cart"));
 const Shipping = lazy(() => import("./pages/shipping"))
+// const CheckOut = lazy(() => import("./pages/Checkout"))
 const Login = lazy(() => import("./pages/login"));
 const Orders = lazy(() => import("./pages/orders"));
 const OrderDetails = lazy(() => import("./pages/order-details"));
@@ -82,6 +84,7 @@ const App = () => {
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
+            <Route path="/pay" element={<Checkout />} />
           </Route>
 
           {/* Admin user routes */}

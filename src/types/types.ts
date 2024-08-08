@@ -22,7 +22,7 @@ export type ShippingInfo = {
     city: string;
     state: string;
     country: string;
-    pincode: string;
+    pinCode: string;
 }
 
 export type CartItem = {

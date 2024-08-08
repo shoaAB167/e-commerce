@@ -8,7 +8,8 @@ interface ImportMetaEnv {
     VITE_MESSAGING_SENDER_ID: string,
     VITE_APP_ID: string,
     VITE_MEASUREMENT_ID: string,
-    VITE_SERVER: string
+    VITE_SERVER: string,
+    VITE_STRIPE_KEY : string
 }
 
 interface ImportMeta {
