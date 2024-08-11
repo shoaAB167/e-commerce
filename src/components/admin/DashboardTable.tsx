@@ -3,9 +3,9 @@ import TableHOC from "./TableHOC";
 
 interface DataType {
   _id: string;
+  amount: number;
   quantity: number;
   discount: number;
-  amount: number;
   status: string;
 }
 

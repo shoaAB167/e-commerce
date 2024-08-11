@@ -2,7 +2,7 @@ import { FaTrash } from "react-icons/fa";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { Order, OrderItem } from "../../../types/types";
-import { server } from "../../../redux/store";
+import { RootState, server } from "../../../redux/store";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { UserReducerInitialState } from "../../../types/reducer-types";
@@ -22,7 +22,7 @@ const defaultData: Order = {
     city: "",
     state: "",
     country: "",
-    pincode: "",
+    pinCode: "",
   },
   status: "",
   subtotal: 0,
@@ -36,9 +36,7 @@ const defaultData: Order = {
 };
 
 const TransactionManagement = () => {
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const params = useParams();
   const navigate = useNavigate();
@@ -46,7 +44,7 @@ const TransactionManagement = () => {
   const { isLoading, data, isError } = useOrderDetailsQuery(params.id!);
 
   const {
-    shippingInfo: { address, city, state, country, pincode },
+    shippingInfo: { address, city, state, country, pinCode },
     orderItems,
     user: { name },
     status,
@@ -65,7 +63,7 @@ const TransactionManagement = () => {
       userId: user?._id!,
       orderId: data?.order._id!,
     });
-    responseToast(res,navigate,"/admin/transaction")
+    responseToast(res, navigate, "/admin/transaction");
   };
 
   const deleteHandler = async () => {
@@ -73,7 +71,7 @@ const TransactionManagement = () => {
       userId: user?._id!,
       orderId: data?.order._id!,
     });
-    responseToast(res,navigate,"/admin/transaction")
+    responseToast(res, navigate, "/admin/transaction");
   };
 
   if (isError) return <Navigate to={"/404"} />;
@@ -96,7 +94,7 @@ const TransactionManagement = () => {
               {orderItems.map((i) => (
                 <ProductCard
                   key={i._id}
-                  name={i.name}
+                  name={i?.name}
                   photo={`${server}/${i.photo}`}
                   productId={i.productId}
                   _id={i._id}
@@ -115,7 +113,7 @@ const TransactionManagement = () => {
               <p>Name: {name}</p>
               <p>
                 Address:{" "}
-                {`${address}, ${city}, ${state}, ${country} ${pincode}`}
+                {`${address}, ${city}, ${state}, ${country} ${pinCode}`}
               </p>
               <h5>Amount Info</h5>
               <p>Subtotal: {subtotal}</p>
