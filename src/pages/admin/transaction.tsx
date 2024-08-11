@@ -9,6 +9,7 @@ import { useAllOrdersQuery } from "../../redux/api/orderAPI";
 import { CustomError } from "../../types/api-types";
 import toast from "react-hot-toast";
 import { Skeleton } from "../../components/loader";
+import { RootState } from "../../redux/store";
 interface DataType {
   user: string;
   amount: number;
@@ -74,11 +75,9 @@ const columns: Column<DataType>[] = [
 ];
 
 const Transaction = () => {
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
   const { isLoading, data, isError, error } = useAllOrdersQuery(user?._id!);
-  
+
   const [rows, setRows] = useState<DataType[]>([]);
   if (isError) {
     const err = error as CustomError;

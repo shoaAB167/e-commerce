@@ -18,3 +18,5 @@ export const store = configureStore({
     middleware: (gDM) => gDM().concat(userAPI.middleware, productAPI.middleware, orderApi.middleware)
     // middleware : (mid) => [...mid(), userAPI.middleware]
 })
+
+export type RootState = ReturnType<typeof store.getState>

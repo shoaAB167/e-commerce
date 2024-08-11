@@ -1,13 +1,13 @@
-import { ReactElement, useState, useEffect } from "react";
-import TableHOC from "../components/admin/TableHOC";
-import { Column } from "react-table";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { UserReducerInitialState } from "../types/reducer-types";
-import { useAllOrdersQuery, useMyOrdersQuery } from "../redux/api/orderAPI";
-import { CustomError } from "../types/api-types";
+import { ReactElement, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Column } from "react-table";
+import TableHOC from "../components/admin/TableHOC";
 import { Skeleton } from "../components/loader";
+import { useMyOrdersQuery } from "../redux/api/orderAPI";
+import { RootState } from "../redux/store";
+import { CustomError } from "../types/api-types";
 
 type DataType = {
   _id: string;
@@ -29,7 +29,7 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
   const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+    (state: RootState) => state.userReducer
   );
   const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
   const [rows, setRows] = useState<DataType[]>([]);
