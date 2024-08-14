@@ -1,23 +1,25 @@
 const Loader = () => {
   return (
-    <div>loading...</div>
-  )
-}
+    <section className="loader">
+      <div></div>
+    </section>
+  );
+};
 
-export default Loader
+export default Loader;
 
 interface Skeletonprops {
-  width?:string;
-  length?:number;
+  width?: string;
+  length?: number;
 }
 
-export const Skeleton = ({width='unset', length=3} : Skeletonprops) => {
-  const skeletons = Array.from({length},(_,idx) => (
+export const Skeleton = ({ width = "unset", length = 3 }: Skeletonprops) => {
+  const skeletons = Array.from({ length }, (_, idx) => (
     <div key={idx} className="skeleton-shape"></div>
-  ))
+  ));
   return (
-  <div className="skeleton-loader" style={{width}}>
-    {skeletons}
-  </div>
-  )
-}
+    <div className="skeleton-loader" style={{ width }}>
+      {skeletons}
+    </div>
+  );
+};

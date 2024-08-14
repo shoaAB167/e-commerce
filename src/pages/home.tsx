@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/reducer/cartReducer";
 
 const Home = () => {
-  const { data, isLoading, isError, isSuccess, error } =
+  const { data, isLoading, isError } =
     useLatestProductsQuery("");
   const dispatch = useDispatch();
 
