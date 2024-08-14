@@ -116,3 +116,16 @@ export type Pie = {
     },
     usersAgeGroup: UserAgeGroup
 }
+
+export type Bar = {
+    products: number[],
+    users: number[],
+    orders: number[]
+}
+
+export type Line = {
+    products: number[];
+    users: number[];
+    discount: number[];
+    revenue: number[];
+}

@@ -1,29 +1,25 @@
-import toast from "react-hot-toast";
 import { BiMaleFemale } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { FaRegBell } from "react-icons/fa";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import { BarChart, DoughnutChart } from "../../components/admin/Charts";
 import Table from "../../components/admin/DashboardTable";
 import { Skeleton } from "../../components/loader";
 import { useStatsQuery } from "../../redux/api/dashboardAPI";
 import { RootState } from "../../redux/store";
-import { CustomError } from "../../types/api-types";
 
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
 
 const Dashboard = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
-  const { isLoading, data, error, isError } = useStatsQuery(user?._id!);
+  const { isLoading, data, isError } = useStatsQuery(user?._id!);
   const stats = data?.stats!;
 
-  if (isError) {
-    const err = error as CustomError;
-    toast.error(err.data.messsage);
-  }
+  if (isError) return <Navigate to={"/"}/> 
   return (
     <div className="admin-container">
       <AdminSidebar />
@@ -48,8 +44,8 @@ const Dashboard = () => {
                 color="rgb(0, 115, 255)"
               />
               <WidgetItem
-                percent={-14}
-                value={stats.changePercent.user}
+                percent={stats.changePercent.user}
+                value={stats.count.user}
                 color="rgb(0 198 202)"
                 heading="Users"
               />
@@ -59,10 +55,9 @@ const Dashboard = () => {
                 color="rgb(255 196 0)"
                 heading="Transactions"
               />
-
               <WidgetItem
-                percent={30}
-                value={stats.changePercent.product}
+                percent={stats.changePercent.product}
+                value={stats.count.product}
                 color="rgb(76 0 255)"
                 heading="Products"
               />
@@ -105,7 +100,7 @@ const Dashboard = () => {
                 <h2>Gender Ratio</h2>
                 <DoughnutChart
                   labels={["Female", "Male"]}
-                  data={[stats.userRatio.female,stats.userRatio.male]}
+                  data={[stats.userRatio.female, stats.userRatio.male]}
                   backgroundColor={[
                     "hsl(340, 82%, 56%)",
                     "rgba(53, 162, 235, 0.8)",
